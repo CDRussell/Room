@@ -1,6 +1,10 @@
 package com.cdrussell.casterio.room
 
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
 
-data class Task(val id: Int = 0,
-                val title: String = "",
-                val completed: Boolean = false)
+
+@Entity
+data class Task(@PrimaryKey(autoGenerate = true) var id: Int = 0,
+                var title: String = "",
+                var completed: Boolean = false)
