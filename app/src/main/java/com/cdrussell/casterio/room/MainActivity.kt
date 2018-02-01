@@ -12,11 +12,14 @@ import kotlinx.android.synthetic.main.content_main.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var taskListAdapter: TaskListAdapter
+    private lateinit var database: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        database = AppDatabase.getInstance(this)
 
         addTaskButton.setOnClickListener {
             addTask()
