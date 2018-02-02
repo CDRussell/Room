@@ -29,9 +29,15 @@ class TaskListAdapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         fun bind(task: Task) {
             itemView.taskTitle.text = task.title
         }
 
+    }
+
+    fun clear() {
+        tasks.clear()
+        notifyDataSetChanged()
     }
 }

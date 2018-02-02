@@ -23,14 +23,14 @@ class MainActivity : AppCompatActivity() {
 
         database = AppDatabase.getInstance(this)
         taskDao = database.taskDao()
-        
+
 
         addTaskButton.setOnClickListener {
             addTask()
         }
-        
+
         taskTitleInput.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, _ ->
-            if(actionId == IME_ACTION_DONE) {
+            if (actionId == IME_ACTION_DONE) {
                 addTask()
                 taskTitleInput.setText("")
                 return@OnEditorActionListener true
@@ -41,6 +41,8 @@ class MainActivity : AppCompatActivity() {
         taskListAdapter = TaskListAdapter()
         taskList.layoutManager = LinearLayoutManager(this)
         taskList.adapter = taskListAdapter
+
+        refreshTaskList()
     }
 
     private fun addTask() {
@@ -53,6 +55,19 @@ class MainActivity : AppCompatActivity() {
 
         val task = Task(title = title)
 
-        thread { taskDao.insert(task) }
+        thread {
+            taskDao.insert(task)
+            refreshTaskList()
+        }
+    }
+
+    private fun refreshTaskList() {
+        runOnUiThread { taskListAdapter.clear() }
+
+        thread {
+            taskDao.getAll().forEach {
+                runOnUiThread { taskListAdapter.addTask(it) }
+            }
+        }
     }
 }
