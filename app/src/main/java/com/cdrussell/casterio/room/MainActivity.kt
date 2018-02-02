@@ -20,6 +20,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         database = AppDatabase.getInstance(this)
+        val taskDao = database.taskDao()
+        
 
         addTaskButton.setOnClickListener {
             addTask()

@@ -14,6 +14,8 @@ import android.content.Context
 )
 abstract class AppDatabase : RoomDatabase() {
 
+    abstract fun taskDao(): TaskDao
+
 
     // Singleton example from Google Samples -
     // https://github.com/googlesamples/android-architecture-components/blob/master/BasicRxJavaSampleKotlin/app/src/main/java/com/example/android/observability/persistence/UsersDatabase.kt
