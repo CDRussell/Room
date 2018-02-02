@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
@@ -52,6 +53,6 @@ class MainActivity : AppCompatActivity() {
 
         val task = Task(title = title)
 
-        taskListAdapter.addTask(task)
+        thread { taskDao.insert(task) }
     }
 }
