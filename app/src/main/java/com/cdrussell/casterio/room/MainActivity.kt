@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var taskListAdapter: TaskListAdapter
     private lateinit var database: AppDatabase
+    private lateinit var taskDao: TaskDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         database = AppDatabase.getInstance(this)
-        val taskDao = database.taskDao()
+        taskDao = database.taskDao()
         
 
         addTaskButton.setOnClickListener {
