@@ -7,6 +7,8 @@ import android.arch.persistence.room.Insert
 interface TaskDao {
 
     @Insert
-    fun insert(task: Task)
+    fun insert(task: Task): Long
 
+    @Insert
+    fun insertAll(tasks: List<Task>): List<Long>
 }
