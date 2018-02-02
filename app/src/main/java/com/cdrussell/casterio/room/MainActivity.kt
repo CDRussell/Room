@@ -62,11 +62,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun refreshTaskList() {
-        runOnUiThread { taskListAdapter.clear() }
-
         thread {
-            taskDao.getAll().forEach {
-                runOnUiThread { taskListAdapter.addTask(it) }
+            val tasks = taskDao.getAll()
+            runOnUiThread {
+
+                taskListAdapter.clear()
+                tasks.forEach { taskListAdapter.addTask(it) }
             }
         }
     }
