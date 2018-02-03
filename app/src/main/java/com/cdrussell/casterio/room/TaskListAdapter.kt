@@ -8,7 +8,8 @@ import com.cdrussell.casterio.room.TaskListAdapter.ViewHolder
 import kotlinx.android.synthetic.main.item_task_row.view.*
 
 
-class TaskListAdapter : RecyclerView.Adapter<ViewHolder>() {
+class TaskListAdapter(private val clickListener: (Task) -> Unit) :
+    RecyclerView.Adapter<ViewHolder>() {
 
     private val tasks: MutableList<Task> = ArrayList()
 
@@ -18,7 +19,7 @@ class TaskListAdapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(tasks[position])
+        holder.bind(tasks[position], clickListener)
     }
 
     override fun getItemCount(): Int = tasks.size
@@ -32,8 +33,9 @@ class TaskListAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(task: Task) {
+        fun bind(task: Task, clickListener: (Task) -> Unit) {
             itemView.taskTitle.text = task.title
+            itemView.setOnClickListener { clickListener(task) }
         }
 
     }

@@ -39,7 +39,11 @@ class MainActivity : AppCompatActivity() {
             return@OnEditorActionListener false
         })
 
-        taskListAdapter = TaskListAdapter()
+        taskListAdapter = TaskListAdapter({
+            val taskId = it.id
+            startActivity(TaskDetailsActivity.launchIntent(this, taskId))
+        })
+
         taskList.layoutManager = LinearLayoutManager(this)
         taskList.adapter = taskListAdapter
 
