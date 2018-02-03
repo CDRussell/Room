@@ -37,9 +37,4 @@ class TaskListAdapter : RecyclerView.Adapter<ViewHolder>() {
         }
 
     }
-
-    fun clear() {
-        tasks.clear()
-        notifyDataSetChanged()
-    }
 }
