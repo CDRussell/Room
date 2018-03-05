@@ -24,8 +24,10 @@ class TaskListAdapter : RecyclerView.Adapter<ViewHolder>() {
     override fun getItemCount(): Int = tasks.size
 
     fun addTask(task: Task) {
-        tasks.add(task)
-        notifyItemInserted(tasks.size)
+        if (!tasks.contains(task)) {
+            tasks.add(task)
+            notifyItemInserted(tasks.size)
+        }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
