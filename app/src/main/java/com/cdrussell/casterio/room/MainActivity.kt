@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         addTaskButton.setOnClickListener {
             addTask()
+            taskTitleInput.setText("")
         }
         
         taskTitleInput.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, _ ->
