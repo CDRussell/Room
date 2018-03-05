@@ -65,8 +65,6 @@ class MainActivity : AppCompatActivity() {
         thread {
             val tasks = taskDao.getAll()
             runOnUiThread {
-
-                taskListAdapter.clear()
                 tasks.forEach { taskListAdapter.addTask(it) }
             }
         }
