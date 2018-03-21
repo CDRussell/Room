@@ -22,7 +22,7 @@ android {
 }
 
 ext {
-    support_libraries = "27.0.2"
+    support_libraries = "27.1.0"
 }
 
 dependencies {
