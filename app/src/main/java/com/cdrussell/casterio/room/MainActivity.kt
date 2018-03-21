@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         taskList.adapter = taskListAdapter
 
         taskDao.getAll().observe(this, Observer<List<Task>> {
-            it?.forEach { taskListAdapter.addTask(it) }
+            taskListAdapter.submitList(it)
         })
     }
 
