@@ -7,4 +7,5 @@
     <string name="title_label">Title:</string>
     <string name="delete">Delete Task</string>
     <string name="could_not_load_task">Failed to load task details</string>
+    <string name="task_completion_state">Completed</string>
 </resources>
