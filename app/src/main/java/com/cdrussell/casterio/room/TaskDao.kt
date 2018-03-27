@@ -1,10 +1,7 @@
 package com.cdrussell.casterio.room
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 
 @Dao
 interface TaskDao {
@@ -23,4 +20,7 @@ interface TaskDao {
 
     @Delete
     fun delete(task: Task)
+
+    @Update
+    fun update(task: Task)
 }
