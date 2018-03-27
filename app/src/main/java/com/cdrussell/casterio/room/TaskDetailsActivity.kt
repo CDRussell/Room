@@ -7,15 +7,14 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_task_details.taskTitle
+import kotlinx.android.synthetic.main.activity_task_details.*
 import kotlin.concurrent.thread
 import kotlinx.android.synthetic.main.activity_task_details.taskId as taskIdInput
 
 class TaskDetailsActivity : AppCompatActivity() {
 
     private lateinit var taskDao: TaskDao
-
-    private lateinit var task: Task
+    private var task: Task? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +30,19 @@ class TaskDetailsActivity : AppCompatActivity() {
 
             taskTitle.text = it.title
             taskIdInput.text = it.id.toString()
+
+            taskCompletionCheckbox.isChecked = it.completed
             task = it
         })
+
+        taskCompletionCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            task?.let {
+
+                // update the task in the DB
+                it.completed = isChecked
+                thread { taskDao.update(it) }
+            }
+        }
     }
 
     private fun extractTaskId(): Int {
@@ -51,7 +61,9 @@ class TaskDetailsActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.menu_item_delete_task -> {
 
-                thread { taskDao.delete(task) }
+                task?.let {
+                    thread { taskDao.delete(it) }
+                }
 
                 true
             }
