@@ -4,17 +4,21 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
+import com.cdrussell.casterio.room.users.User
+import com.cdrussell.casterio.room.users.UserDao
 
 
 @Database(
     version = 1, entities = [
         // list DB entities
-        Task::class
+        Task::class,
+        User::class
     ]
 )
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun taskDao(): TaskDao
+    abstract fun userDao(): UserDao
 
 
     // Singleton example from Google Samples -

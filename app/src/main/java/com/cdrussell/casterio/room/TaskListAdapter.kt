@@ -1,5 +1,6 @@
 package com.cdrussell.casterio.room
 
+import android.content.Context
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -39,8 +40,15 @@ class TaskListAdapter(private val clickListener: (Task) -> Unit) :
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(task: Task, clickListener: (Task) -> Unit) {
+            val context = itemView.context
             itemView.taskTitle.text = task.title
+            itemView.assignee.text = buildAssigneeString(context, task)
             itemView.setOnClickListener { clickListener(task) }
+        }
+
+        private fun buildAssigneeString(context: Context, task: Task): String {
+            val assignee= task.userId?.toString() ?: context.getString(R.string.unassigned)
+            return context.getString(R.string.assignedLabel, assignee)
         }
 
     }

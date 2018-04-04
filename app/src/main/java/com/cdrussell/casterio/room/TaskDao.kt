@@ -23,4 +23,7 @@ interface TaskDao {
 
     @Update
     fun update(task: Task)
+
+    @Query("SELECT task.* FROM Task LEFT OUTER JOIN User ON Task.userId == User.id")
+    fun getTasksAndUsers(): LiveData<List<Task>>
 }

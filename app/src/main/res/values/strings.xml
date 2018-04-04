@@ -8,4 +8,8 @@
     <string name="delete">Delete Task</string>
     <string name="could_not_load_task">Failed to load task details</string>
     <string name="task_completion_state">Completed</string>
+    <string name="assignedLabel">Assigned to: %s</string>
+    <string name="unassigned">Unassigned</string>
+    <string name="users">Users</string>
+    <string name="manageUsers">Manage Users</string>
 </resources>
