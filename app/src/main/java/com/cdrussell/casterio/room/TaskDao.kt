@@ -26,4 +26,13 @@ interface TaskDao {
 
     @Query("SELECT task.* FROM Task LEFT OUTER JOIN User ON Task.userId == User.id")
     fun getTasksAndUsers(): LiveData<List<Task>>
+
+    @Query("SELECT * FROM Task LEFT OUTER JOIN User ON Task.userId == User.id WHERE Task.id = :taskId")
+    fun getTaskAndUsers(taskId: Int): LiveData<Task>
+
+    data class UserTask(var id: Int,
+                        var title: String,
+                        var completed: Boolean,
+                        var userId: Int?,
+                        var name: String?)
 }

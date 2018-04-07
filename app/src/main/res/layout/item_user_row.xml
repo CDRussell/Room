@@ -15,7 +15,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/taskTitle"
+            android:id="@+id/userName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="16sp"
@@ -24,16 +24,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="Water the plants" />
 
-        <TextView
-            android:id="@+id/assignee"
+        <ImageView
+            android:id="@+id/deleteUser"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/taskTitle"
+            android:layout_height="0dp"
+            android:scaleType="center"
+            android:paddingEnd="14dp"
+            android:paddingStart="14dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/ic_delete_white_24dp"
+            android:tint="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="12sp"
-            tools:text = "Assigned to: Alice"
-            />
-
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5"
+            tools:ignore="ContentDescription" />
 
     </android.support.constraint.ConstraintLayout>
 

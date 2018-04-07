@@ -13,4 +13,7 @@
     <string name="unassigned">Unassigned</string>
     <string name="users">Users</string>
     <string name="manageUsers">Manage Users</string>
+    <string name="taskDetailsAssignedLabel">Assigned to:</string>
+    <string name="unassign">Unassign</string>
+    <string name="taskDetailsReassignLabel">Assign Task</string>
 </resources>

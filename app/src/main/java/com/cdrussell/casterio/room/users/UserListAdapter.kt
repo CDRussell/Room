@@ -10,7 +10,7 @@ import com.cdrussell.casterio.room.R
 import kotlinx.android.synthetic.main.item_user_row.view.*
 
 
-class UserListAdapter(private val clickListener: (User) -> Unit) :
+class UserListAdapter(private val deleteListener: (User) -> Unit) :
     ListAdapter<User, UserListAdapter.ViewHolder>(DIFF_UTIL_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -19,7 +19,7 @@ class UserListAdapter(private val clickListener: (User) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), clickListener)
+        holder.bind(getItem(position), deleteListener)
     }
 
     companion object {
@@ -38,9 +38,9 @@ class UserListAdapter(private val clickListener: (User) -> Unit) :
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(user: User, clickListener: (User) -> Unit) {
-            itemView.taskTitle.text = user.name
-            itemView.setOnClickListener { clickListener(user) }
+        fun bind(user: User, deleteListener: (User) -> Unit) {
+            itemView.userName.text = user.name
+            itemView.deleteUser.setOnClickListener { deleteListener(user) }
         }
     }
 }

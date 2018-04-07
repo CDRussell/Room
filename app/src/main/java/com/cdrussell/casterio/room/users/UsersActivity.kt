@@ -42,7 +42,9 @@ class UsersActivity : AppCompatActivity() {
             return@OnEditorActionListener false
         })
 
-        userListAdapter = UserListAdapter({})
+        userListAdapter = UserListAdapter({
+            thread { userDao.delete(it) }
+        })
 
         userList.layoutManager = LinearLayoutManager(this)
         userList.adapter = userListAdapter

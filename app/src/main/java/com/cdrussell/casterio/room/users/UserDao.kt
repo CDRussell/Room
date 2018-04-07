@@ -19,9 +19,9 @@ interface UserDao {
     fun getUser(userId: Int): LiveData<User>
 
     @Delete
-    fun delete(task: User)
+    fun delete(user: User)
 
     @Update
-    fun update(task: User)
+    fun update(user: User)
 
 }
