@@ -1,5 +1,6 @@
 package com.cdrussell.casterio.room
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
@@ -92,10 +93,9 @@ class TaskDetailsActivity : AppCompatActivity() {
                 }
 
                 val selectedUser = assigneeArrayAdapter.getItem(position)
-                if(selectedUser == null || selectedUser == placeholderUserInstruction) {
+                if (selectedUser == null || selectedUser == placeholderUserInstruction) {
                     return
-                }
-                else if (selectedUser == placeholderUserUnassign) {
+                } else if (selectedUser == placeholderUserUnassign) {
                     unassignUserFromTask()
                 } else {
                     assignUserToTask(selectedUser)
@@ -175,6 +175,7 @@ class TaskDetailsActivity : AppCompatActivity() {
             return configureListView(position, convertView, parent)
         }
 
+        @SuppressLint("SetTextI18n")
         private fun configureListView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val listItemView: View = convertView ?: LayoutInflater.from(context).inflate(
                 android.R.layout.simple_spinner_dropdown_item,
@@ -184,7 +185,7 @@ class TaskDetailsActivity : AppCompatActivity() {
             val user = getItem(position)
 
             val textView = listItemView.findViewById<View>(android.R.id.text1) as TextView
-            textView.text = user.name
+            textView.text = user.name + if (user.id >= 0) " (id = ${user.id})" else ""
             return listItemView
         }
     }
