@@ -1,6 +1,5 @@
 package com.cdrussell.casterio.room
 
-import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
@@ -23,7 +22,7 @@ class TaskDetailsActivity : AppCompatActivity() {
     private lateinit var taskDao: TaskDao
     private lateinit var userDao: UserDao
 
-    private lateinit var assigneeArrayAdapter: ArrayAdapter<User>
+    private lateinit var assigneeArrayAdapter: ArrayAdapter<UserSelectionChoice>
 
     private var task: Task? = null
 
@@ -55,8 +54,8 @@ class TaskDetailsActivity : AppCompatActivity() {
         })
 
         userDao.getAll().observe(this, Observer<List<User>> {
-            assigneeArrayAdapter.addAll(it)
-            assigneeArrayAdapter.add(placeholderUserUnassign)
+            it?.forEach { assigneeArrayAdapter.add(UserSelectionChoice.SelectedUser(it)) }
+            assigneeArrayAdapter.add(UserSelectionChoice.Unassign)
 
             assignee.isEnabled = true
         })
@@ -72,7 +71,7 @@ class TaskDetailsActivity : AppCompatActivity() {
     private fun configureAssigneeAdapter() {
         assigneeArrayAdapter = AssigneeAdapter(this, android.R.layout.simple_spinner_item)
         assigneeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        assigneeArrayAdapter.add(placeholderUserInstruction)
+        assigneeArrayAdapter.add(UserSelectionChoice.Instruction)
         assignee.adapter = assigneeArrayAdapter
         assignee.isEnabled = false
 
@@ -92,13 +91,10 @@ class TaskDetailsActivity : AppCompatActivity() {
                     return
                 }
 
-                val selectedUser = assigneeArrayAdapter.getItem(position)
-                if (selectedUser == null || selectedUser == placeholderUserInstruction) {
-                    return
-                } else if (selectedUser == placeholderUserUnassign) {
-                    unassignUserFromTask()
-                } else {
-                    assignUserToTask(selectedUser)
+                val selectedUserChoice = assigneeArrayAdapter.getItem(position)
+                when(selectedUserChoice) {
+                    is UserSelectionChoice.SelectedUser -> assignUserToTask(selectedUserChoice.user)
+                    UserSelectionChoice.Unassign -> unassignUserFromTask()
                 }
 
                 // reset to show "assign task" instruction
@@ -154,9 +150,6 @@ class TaskDetailsActivity : AppCompatActivity() {
 
         private const val TASK_ID = "INTENT_TASK_ID"
 
-        private val placeholderUserUnassign = User(-1, "Unassign")
-        private val placeholderUserInstruction = User(-2, "Assign Task")
-
         fun launchIntent(context: Context, taskId: Int): Intent {
             val intent = Intent(context, TaskDetailsActivity::class.java)
             intent.putExtra(TASK_ID, taskId)
@@ -164,8 +157,14 @@ class TaskDetailsActivity : AppCompatActivity() {
         }
     }
 
+    private sealed class UserSelectionChoice {
+        object Instruction : UserSelectionChoice()
+        object Unassign : UserSelectionChoice()
+        data class SelectedUser(val user: User) : UserSelectionChoice()
+    }
+
     private class AssigneeAdapter(context: Context, resource: Int) :
-        ArrayAdapter<User>(context, resource) {
+        ArrayAdapter<UserSelectionChoice>(context, resource) {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             return configureListView(position, convertView, parent)
@@ -175,17 +174,24 @@ class TaskDetailsActivity : AppCompatActivity() {
             return configureListView(position, convertView, parent)
         }
 
-        @SuppressLint("SetTextI18n")
         private fun configureListView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val listItemView: View = convertView ?: LayoutInflater.from(context).inflate(
                 android.R.layout.simple_spinner_dropdown_item,
                 parent,
                 false
             )
-            val user = getItem(position)
+            val userSelectionChoice = getItem(position)
 
             val textView = listItemView.findViewById<View>(android.R.id.text1) as TextView
-            textView.text = user.name + if (user.id >= 0) " (id = ${user.id})" else ""
+
+            textView.text = when (userSelectionChoice) {
+                is UserSelectionChoice.SelectedUser -> {
+                    "${userSelectionChoice.user.name} (id = ${userSelectionChoice.user.id})"
+                }
+                UserSelectionChoice.Instruction -> context.getString(R.string.assignTaskInstruction)
+                UserSelectionChoice.Unassign -> context.getString(R.string.unassign)
+            }
+
             return listItemView
         }
     }

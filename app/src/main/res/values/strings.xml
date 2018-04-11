@@ -16,4 +16,5 @@
     <string name="taskDetailsAssignedLabel">Assigned to:</string>
     <string name="unassign">Unassign</string>
     <string name="taskDetailsReassignLabel">Assign Task</string>
+    <string name="assignTaskInstruction">Assign Task</string>
 </resources>
