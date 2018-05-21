@@ -53,7 +53,7 @@
             android:text="@string/taskDetailsAssignedLabel" />
 
         <TextView
-            android:id="@+id/assigneeUserId"
+            android:id="@+id/assigneeUserName"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"

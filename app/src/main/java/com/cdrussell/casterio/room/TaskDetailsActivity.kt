@@ -38,19 +38,19 @@ class TaskDetailsActivity : AppCompatActivity() {
         userDao = AppDatabase.getInstance(this).userDao()
 
         val taskId = extractTaskId()
-        taskDao.getTask(taskId).observe(this, Observer<Task> {
+
+
+        taskDao.getTaskAndUser(taskId).observe(this, Observer<TaskDao.UserTask> {
+
             if (it == null) {
                 finish()
                 return@Observer
             }
 
-            taskTitle.text = it.title
-            taskIdInput.text = it.id.toString()
-            assigneeUserId.text = it.userId?.toString() ?: getString(R.string.unassigned)
+            task = it.task
 
-            taskCompletionCheckbox.isChecked = it.completed
-
-            task = it
+            updateUserDetails(it.user)
+            updateTaskDetails(task)
         })
 
         userDao.getAll().observe(this, Observer<List<User>> {
@@ -65,6 +65,17 @@ class TaskDetailsActivity : AppCompatActivity() {
                 it.completed = isChecked
                 updateTask(it)
             }
+        }
+    }
+
+    private fun updateUserDetails(user: User?) {
+        assigneeUserName.text = user?.name ?: getString(R.string.unassigned)
+    }
+
+    private fun updateTaskDetails(task: Task?) {
+        if (task != null) {
+            taskIdInput.text = task.id.toString()
+            taskCompletionCheckbox.isChecked = task.completed
         }
     }
 
@@ -92,7 +103,7 @@ class TaskDetailsActivity : AppCompatActivity() {
                 }
 
                 val selectedUserChoice = assigneeArrayAdapter.getItem(position)
-                when(selectedUserChoice) {
+                when (selectedUserChoice) {
                     is UserSelectionChoice.SelectedUser -> assignUserToTask(selectedUserChoice.user)
                     UserSelectionChoice.Unassign -> unassignUserFromTask()
                 }
