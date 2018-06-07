@@ -7,11 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.cdrussell.casterio.room.R
+import com.cdrussell.casterio.room.users.UserDao.UserAndTasks
 import kotlinx.android.synthetic.main.item_user_row.view.*
 
 
-class UserListAdapter(private val deleteListener: (User) -> Unit) :
-    ListAdapter<User, UserListAdapter.ViewHolder>(DIFF_UTIL_CALLBACK) {
+class UserListAdapter(private val deleteListener: (UserAndTasks) -> Unit) :
+    ListAdapter<UserAndTasks, UserListAdapter.ViewHolder>(DIFF_UTIL_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,13 +25,13 @@ class UserListAdapter(private val deleteListener: (User) -> Unit) :
 
     companion object {
 
-        val DIFF_UTIL_CALLBACK = object : DiffUtil.ItemCallback<User>() {
+        val DIFF_UTIL_CALLBACK = object : DiffUtil.ItemCallback<UserAndTasks>() {
 
-            override fun areItemsTheSame(oldItem: User?, newItem: User?): Boolean {
-                return oldItem?.id == newItem?.id
+            override fun areItemsTheSame(oldItem: UserAndTasks?, newItem: UserAndTasks?): Boolean {
+                return oldItem?.user?.id == newItem?.user?.id
             }
 
-            override fun areContentsTheSame(oldItem: User?, newItem: User?): Boolean {
+            override fun areContentsTheSame(oldItem: UserAndTasks?, newItem: UserAndTasks?): Boolean {
                 return oldItem == newItem
             }
         }
@@ -38,9 +39,12 @@ class UserListAdapter(private val deleteListener: (User) -> Unit) :
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(user: User, deleteListener: (User) -> Unit) {
-            itemView.userName.text = user.name
-            itemView.deleteUser.setOnClickListener { deleteListener(user) }
+        fun bind(
+            userTask: UserAndTasks,
+            deleteListener: (UserAndTasks) -> Unit) {
+            itemView.userName.text = userTask.user.name
+            itemView.numTasksAssigned.text = itemView.context.getString(R.string.numTasksAssigned, userTask.tasks.size)
+            itemView.deleteUser.setOnClickListener { deleteListener(userTask) }
         }
     }
 }

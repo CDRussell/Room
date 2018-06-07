@@ -43,14 +43,14 @@ class UsersActivity : AppCompatActivity() {
         })
 
         userListAdapter = UserListAdapter({
-            thread { userDao.delete(it) }
+            thread { userDao.delete(it.user) }
         })
 
         userList.layoutManager = LinearLayoutManager(this)
         userList.adapter = userListAdapter
 
 
-        userDao.getAll().observe(this, Observer<List<User>> {
+        userDao.getAllUsersAndTasks().observe(this, Observer<List<UserDao.UserAndTasks>> {
             userListAdapter.submitList(it)
         })
     }

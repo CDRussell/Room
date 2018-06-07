@@ -2,6 +2,7 @@ package com.cdrussell.casterio.room.users
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
+import com.cdrussell.casterio.room.Task
 
 @Dao
 interface UserDao {
@@ -15,13 +16,25 @@ interface UserDao {
     @Query("SELECT * FROM User")
     fun getAll(): LiveData<List<User>>
 
-    @Query("SELECT * FROM User WHERE id = :userId")
-    fun getUser(userId: Int): LiveData<User>
+    @Transaction
+    @Query("SELECT * FROM User")
+    fun getAllUsersAndTasks(): LiveData<List<UserAndTasks>>
 
     @Delete
     fun delete(user: User)
 
     @Update
     fun update(user: User)
+
+    class UserAndTasks {
+
+        @Embedded
+        lateinit var user: User
+
+        @Relation(parentColumn = "id", entityColumn = "userId")
+        lateinit var tasks: List<Task>
+
+    }
+
 
 }

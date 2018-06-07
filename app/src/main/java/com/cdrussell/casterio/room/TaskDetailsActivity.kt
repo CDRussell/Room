@@ -39,9 +39,7 @@ class TaskDetailsActivity : AppCompatActivity() {
 
         val taskId = extractTaskId()
 
-
         taskDao.getTaskAndUser(taskId).observe(this, Observer<TaskDao.UserTask> {
-
             if (it == null) {
                 finish()
                 return@Observer
@@ -50,7 +48,8 @@ class TaskDetailsActivity : AppCompatActivity() {
             task = it.task
 
             updateUserDetails(it.user)
-            updateTaskDetails(task)
+            updateTaskDetails(it.task)
+
         })
 
         userDao.getAll().observe(this, Observer<List<User>> {

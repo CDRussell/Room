@@ -17,4 +17,6 @@
     <string name="unassign">Unassign</string>
     <string name="taskDetailsReassignLabel">Assign Task</string>
     <string name="assignTaskInstruction">Assign Task</string>
+    <string name="found_user_tasks">This user has %d tasks</string>
+    <string name="numTasksAssigned">%d tasks</string>
 </resources>
