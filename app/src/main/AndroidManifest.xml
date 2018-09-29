@@ -25,8 +25,8 @@
         <activity
             android:name=".users.UsersActivity"
             android:label="@string/users"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
     </application>
 

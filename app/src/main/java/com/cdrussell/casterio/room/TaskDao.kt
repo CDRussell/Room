@@ -2,6 +2,8 @@ package com.cdrussell.casterio.room
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
+import com.cdrussell.casterio.room.DatabaseDataHolder.AssignedTask
+import com.cdrussell.casterio.room.DatabaseDataHolder.TaskUserPair
 import com.cdrussell.casterio.room.users.User
 
 @Dao
@@ -16,21 +18,35 @@ interface TaskDao {
     @Query("SELECT * FROM Task")
     fun getAll(): LiveData<List<Task>>
 
+    @Transaction
+    @Query("SELECT Task.id as task_id, Task.completed as task_completed, Task.title as task_title, AssignedTask.user, User.* FROM Task LEFT OUTER JOIN AssignedTask on Task.id = AssignedTask.task LEFT OUTER JOIN User on AssignedTask.user = User.id")
+    fun getAllWithAssignedUsers(): LiveData<List<TaskUserPair>>
+
+    @Query("SELECT Task.id as task_id, Task.completed as task_completed, Task.title as task_title, AssignedTask.user, User.* FROM Task LEFT OUTER JOIN AssignedTask on Task.id = AssignedTask.task LEFT OUTER JOIN User on AssignedTask.user = User.id WHERE Task.id = :taskId")
+    fun getAssignedUsers(taskId: Int): LiveData<List<TaskUserPair>>
+
     @Query("SELECT * FROM Task WHERE id = :taskId")
     fun getTask(taskId: Int): LiveData<Task>
 
-    @Delete
+    @Delete()
     fun delete(task: Task)
 
     @Update
     fun update(task: Task)
 
-    @Query("SELECT Task.* FROM Task LEFT OUTER JOIN User ON Task.userId == User.id")
-    fun getTasksAndUsers(): LiveData<List<Task>>
+    @Transaction
+    fun setAssignedUsers(task: Task, user: User) {
+        removeAllAssignedUsers(task.id)
+        val newTask = AssignedTask()
+        newTask.user = user.id
+        newTask.task = task.id
+        addAssignedTask(newTask)
+    }
 
-    @Query("SELECT Task.*, User.id as user_id, User.name as user_name FROM Task LEFT OUTER JOIN User ON Task.userId == User.id WHERE Task.id = :taskId")
-    fun getTaskAndUser(taskId: Int): LiveData<UserTask>
+    @Query("DELETE FROM AssignedTask WHERE AssignedTask.task = :taskId")
+    fun removeAllAssignedUsers(taskId: Int)
 
-    data class UserTask(@Embedded (prefix = "user_") var user: User?,
-                        @Embedded var task: Task?)
+    @Insert
+    fun addAssignedTask(task: AssignedTask)
+
 }

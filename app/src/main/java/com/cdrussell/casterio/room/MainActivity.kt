@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
@@ -44,16 +45,30 @@ class MainActivity : AppCompatActivity() {
             return@OnEditorActionListener false
         })
 
-        taskListAdapter = TaskListAdapter({
-            val taskId = it.id
+        taskListAdapter = TaskListAdapter {
+            val taskId = it.task.id
             startActivity(TaskDetailsActivity.launchIntent(this, taskId))
-        })
+        }
 
         taskList.layoutManager = LinearLayoutManager(this)
         taskList.adapter = taskListAdapter
 
-        taskDao.getTasksAndUsers().observe(this, Observer<List<Task>> {
-            taskListAdapter.submitList(it)
+        taskDao.getAllWithAssignedUsers().observe(this, Observer { assignedTasks ->
+            Log.i("Ttx", "Found ${assignedTasks?.size} tasks")
+
+            if (assignedTasks == null) {
+                return@Observer
+            }
+
+            /*
+             * we currently have a collection of Task<->User? pairs,
+             * a Task might appear with a null User if the task is unassigned
+             * or the same Task might appear multiple times in the list if it has multiple Users assigned to it
+             */
+
+            // we can groupTasks all the potential users for the same task together to give us a list of Tasks, and for each Task a list of Users
+            val items = DatabaseDataHolder.groupTasks(assignedTasks)
+            taskListAdapter.submitList(items)
         })
     }
 
@@ -78,10 +93,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
+        return when (item.itemId) {
             R.id.menuItemManageUsers -> {
                 startActivity(Intent(this, UsersActivity::class.java))
-               true
+                true
             }
             else -> super.onOptionsItemSelected(item)
         }

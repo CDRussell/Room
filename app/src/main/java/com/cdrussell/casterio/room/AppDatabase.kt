@@ -4,6 +4,7 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
+import com.cdrussell.casterio.room.DatabaseDataHolder.AssignedTask
 import com.cdrussell.casterio.room.users.User
 import com.cdrussell.casterio.room.users.UserDao
 
@@ -12,7 +13,8 @@ import com.cdrussell.casterio.room.users.UserDao
     version = 1, entities = [
         // list DB entities
         Task::class,
-        User::class
+        User::class,
+        AssignedTask::class
     ]
 )
 abstract class AppDatabase : RoomDatabase() {

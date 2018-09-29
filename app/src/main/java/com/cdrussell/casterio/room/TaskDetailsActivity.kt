@@ -15,7 +15,8 @@ import com.cdrussell.casterio.room.users.UserDao
 import kotlinx.android.synthetic.main.activity_task_details.*
 import kotlinx.android.synthetic.main.content_task_details.*
 import kotlin.concurrent.thread
-import kotlinx.android.synthetic.main.content_task_details.taskId as taskIdInput
+import kotlinx.android.synthetic.main.content_task_details.taskId as taskIdView
+import kotlinx.android.synthetic.main.content_task_details.taskTitle as taskTitleView
 
 class TaskDetailsActivity : AppCompatActivity() {
 
@@ -39,21 +40,27 @@ class TaskDetailsActivity : AppCompatActivity() {
 
         val taskId = extractTaskId()
 
-        taskDao.getTaskAndUser(taskId).observe(this, Observer<TaskDao.UserTask> {
-            if (it == null) {
-                finish()
+        taskDao.getAssignedUsers(taskId).observe(this, Observer { taskAndUsers ->
+            if(taskAndUsers == null || taskAndUsers.isEmpty()) {
+                task = null
+                updateTaskDetails(null)
+                updateUserDetails(emptyList())
                 return@Observer
             }
 
-            task = it.task
+            // We can group all the users together for our Task
+            val items = DatabaseDataHolder.groupTasks(taskAndUsers)
 
-            updateUserDetails(it.user)
-            updateTaskDetails(it.task)
+            // We've filter by TaskId as the DB level so we'll only see data for that single Task in the collection
+            task = items.first().task
+            val users = items.first().users
 
+            updateTaskDetails(task)
+            updateUserDetails(users)
         })
 
-        userDao.getAll().observe(this, Observer<List<User>> {
-            it?.forEach { assigneeArrayAdapter.add(UserSelectionChoice.SelectedUser(it)) }
+        userDao.getAll().observe(this, Observer<List<User>> { users ->
+            users?.forEach { assigneeArrayAdapter.add(UserSelectionChoice.SelectedUser(it)) }
             assigneeArrayAdapter.add(UserSelectionChoice.Unassign)
 
             assignee.isEnabled = true
@@ -67,13 +74,19 @@ class TaskDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUserDetails(user: User?) {
-        assigneeUserName.text = user?.name ?: getString(R.string.unassigned)
+    private fun updateUserDetails(users:List<User>) {
+        val names = if (users.isEmpty()) {
+            getString(R.string.unassigned)
+        } else {
+            users.joinToString(separator = ", ", transform = { it.name })
+        }
+        assigneeUserName.text = names
     }
 
     private fun updateTaskDetails(task: Task?) {
         if (task != null) {
-            taskIdInput.text = task.id.toString()
+            taskTitleView.text = task.title
+            taskIdView.text = task.id.toString()
             taskCompletionCheckbox.isChecked = task.completed
         }
     }
@@ -115,15 +128,17 @@ class TaskDetailsActivity : AppCompatActivity() {
 
     private fun assignUserToTask(selectedUser: User) {
         task?.let {
-            it.userId = selectedUser.id
-            updateTask(it)
+            thread {
+                taskDao.setAssignedUsers(it, selectedUser)
+            }
         }
     }
 
     private fun unassignUserFromTask() {
         task?.let {
-            it.userId = null
-            updateTask(it)
+            thread {
+                taskDao.removeAllAssignedUsers(it.id)
+            }
         }
     }
 
@@ -148,6 +163,7 @@ class TaskDetailsActivity : AppCompatActivity() {
 
                 task?.let {
                     thread { taskDao.delete(it) }
+                    finish()
                 }
 
                 true

@@ -26,6 +26,7 @@
             android:hint="@string/user_name_description"
             android:imeOptions="actionDone|flagNoExtractUi"
             android:inputType="text|textAutoCorrect|textCapWords"
+            android:nextFocusForward="@id/addUserButton"
             android:maxLines="1"
             android:singleLine="true" />
 

@@ -8,8 +8,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.widget.TextView
 import com.cdrussell.casterio.room.AppDatabase
+import com.cdrussell.casterio.room.DatabaseDataHolder
 import com.cdrussell.casterio.room.R
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_users.*
 import kotlinx.android.synthetic.main.content_users.*
 import kotlin.concurrent.thread
 
@@ -23,6 +24,7 @@ class UsersActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_users)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         database = AppDatabase.getInstance(this)
         userDao = database.userDao()
@@ -42,16 +44,21 @@ class UsersActivity : AppCompatActivity() {
             return@OnEditorActionListener false
         })
 
-        userListAdapter = UserListAdapter({
+        userListAdapter = UserListAdapter {
             thread { userDao.delete(it.user) }
-        })
+        }
 
         userList.layoutManager = LinearLayoutManager(this)
         userList.adapter = userListAdapter
 
 
-        userDao.getAllUsersAndTasks().observe(this, Observer<List<UserDao.UserAndTasks>> {
-            userListAdapter.submitList(it)
+        userDao.getAllWithAssignedTasks().observe(this, Observer { usersAndTasks ->
+            if (usersAndTasks == null) {
+                return@Observer
+            }
+
+            val items = DatabaseDataHolder.groupUsers(usersAndTasks)
+            userListAdapter.submitList(items)
         })
     }
 
