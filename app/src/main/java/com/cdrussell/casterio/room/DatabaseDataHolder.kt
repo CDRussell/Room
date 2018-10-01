@@ -40,7 +40,6 @@ class DatabaseDataHolder {
         val users: List<User>
     )
 
-
     data class UserAndTheirTasks(
         val user: User,
         val tasks: List<Task>

@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import com.cdrussell.casterio.room.DatabaseDataHolder.AssignedTask
 import com.cdrussell.casterio.room.DatabaseDataHolder.TaskUserPair
-import com.cdrussell.casterio.room.users.User
 
 @Dao
 interface TaskDao {
@@ -34,19 +33,10 @@ interface TaskDao {
     @Update
     fun update(task: Task)
 
-    @Transaction
-    fun setAssignedUsers(task: Task, user: User) {
-        removeAllAssignedUsers(task.id)
-        val newTask = AssignedTask()
-        newTask.user = user.id
-        newTask.task = task.id
-        addAssignedTask(newTask)
-    }
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun addAssignedTask(assignedTask: AssignedTask)
 
     @Query("DELETE FROM AssignedTask WHERE AssignedTask.task = :taskId")
     fun removeAllAssignedUsers(taskId: Int)
-
-    @Insert
-    fun addAssignedTask(task: AssignedTask)
 
 }

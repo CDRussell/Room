@@ -10,6 +10,7 @@ import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import com.cdrussell.casterio.room.DatabaseDataHolder.AssignedTask
 import com.cdrussell.casterio.room.users.User
 import com.cdrussell.casterio.room.users.UserDao
 import kotlinx.android.synthetic.main.activity_task_details.*
@@ -41,7 +42,7 @@ class TaskDetailsActivity : AppCompatActivity() {
         val taskId = extractTaskId()
 
         taskDao.getAssignedUsers(taskId).observe(this, Observer { taskAndUsers ->
-            if(taskAndUsers == null || taskAndUsers.isEmpty()) {
+            if (taskAndUsers == null || taskAndUsers.isEmpty()) {
                 task = null
                 updateTaskDetails(null)
                 updateUserDetails(emptyList())
@@ -74,7 +75,7 @@ class TaskDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUserDetails(users:List<User>) {
+    private fun updateUserDetails(users: List<User>) {
         val names = if (users.isEmpty()) {
             getString(R.string.unassigned)
         } else {
@@ -129,7 +130,10 @@ class TaskDetailsActivity : AppCompatActivity() {
     private fun assignUserToTask(selectedUser: User) {
         task?.let {
             thread {
-                taskDao.setAssignedUsers(it, selectedUser)
+                val assignedTask = AssignedTask()
+                assignedTask.user = selectedUser.id
+                assignedTask.task = it.id
+                taskDao.addAssignedTask(assignedTask)
             }
         }
     }
