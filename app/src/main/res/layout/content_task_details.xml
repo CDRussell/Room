@@ -30,6 +30,16 @@
         android:layout_height="wrap_content"
         tools:text="Do the chores" />
 
+    <TextView
+        style="@style/TaskDetailsLabel"
+        android:text="@string/task_creation_date" />
+
+    <TextView
+        android:id="@+id/taskCreationDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="2020-12-30" />
+
     <CheckBox
         android:id="@+id/taskCompletionCheckbox"
         style="@style/TaskDetailsLabel"

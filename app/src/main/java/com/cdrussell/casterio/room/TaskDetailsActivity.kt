@@ -15,6 +15,8 @@ import com.cdrussell.casterio.room.users.User
 import com.cdrussell.casterio.room.users.UserDao
 import kotlinx.android.synthetic.main.activity_task_details.*
 import kotlinx.android.synthetic.main.content_task_details.*
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.concurrent.thread
 import kotlinx.android.synthetic.main.content_task_details.taskId as taskIdView
 import kotlinx.android.synthetic.main.content_task_details.taskTitle as taskTitleView
@@ -27,8 +29,9 @@ class TaskDetailsActivity : AppCompatActivity() {
     private lateinit var assigneeArrayAdapter: ArrayAdapter<UserSelectionChoice>
 
     private var task: Task? = null
-
     private var spinnerInitialised = false
+
+    private val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +92,7 @@ class TaskDetailsActivity : AppCompatActivity() {
             taskTitleView.text = task.title
             taskIdView.text = task.id.toString()
             taskCompletionCheckbox.isChecked = task.completed
+            taskCreationDate.text = dateFormatter.format(task.creationDate)
         }
     }
 
