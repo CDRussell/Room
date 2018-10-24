@@ -1,86 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="20dp"
-    android:layout_marginEnd="20dp"
-    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".TaskDetailsActivity">
-
-    <TextView
-        style="@style/TaskDetailsLabel"
-        android:text="@string/task_id_label" />
-
-    <TextView
-        android:id="@+id/taskId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="123" />
-
-    <TextView
-        style="@style/TaskDetailsLabel"
-        android:text="@string/title_label" />
-
-    <TextView
-        android:id="@+id/taskTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Do the chores" />
-
-    <TextView
-        style="@style/TaskDetailsLabel"
-        android:text="@string/task_creation_date" />
-
-    <TextView
-        android:id="@+id/taskCreationDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="2020-12-30" />
-
-    <CheckBox
-        android:id="@+id/taskCompletionCheckbox"
-        style="@style/TaskDetailsLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:button="@null"
-        android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
-        android:drawablePadding="10dp"
-        android:text="@string/task_completion_state" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal">
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical">
 
         <TextView
             style="@style/TaskDetailsLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="0dp"
-            android:gravity="center_vertical"
-            android:text="@string/taskDetailsAssignedLabel" />
+            android:text="@string/task_id_label" />
 
         <TextView
-            android:id="@+id/assigneeUserName"
+            android:id="@+id/taskId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="123" />
+
+        <TextView
+            style="@style/TaskDetailsLabel"
+            android:text="@string/title_label" />
+
+        <TextView
+            android:id="@+id/taskTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Do the chores" />
+
+        <TextView
+            style="@style/TaskDetailsLabel"
+            android:text="@string/task_creation_date" />
+
+        <TextView
+            android:id="@+id/taskCreationDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="2020-12-30" />
+
+        <CheckBox
+            android:id="@+id/taskCompletionCheckbox"
+            style="@style/TaskDetailsLabel"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:gravity="center_vertical"
-            android:text="@string/unassigned" />
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
+            android:drawablePadding="10dp"
+            android:text="@string/task_completion_state" />
+
+        <TextView
+            style="@style/TaskDetailsLabel"
+            android:labelFor="@+id/notes"
+            android:text="@string/notesLabel" />
+
+        <EditText
+            android:id="@+id/notes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/notesHint"
+            android:imeOptions="flagNoExtractUi"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            tools:text="@tools:sample/lorem" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TaskDetailsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:gravity="center_vertical"
+                android:text="@string/taskDetailsAssignedLabel" />
+
+            <TextView
+                android:id="@+id/assigneeUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/unassigned" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/assignee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            tools:listitem="@android:layout/simple_spinner_dropdown_item" />
+
 
     </LinearLayout>
 
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/assignee"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp"
-        tools:listitem="@android:layout/simple_spinner_dropdown_item" />
+</ScrollView>
 
-
-</LinearLayout>

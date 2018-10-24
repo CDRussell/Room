@@ -20,4 +20,6 @@
     <string name="assignTaskInstruction">Assign Task</string>
     <string name="found_user_tasks">This user has %d tasks</string>
     <string name="numTasksAssigned">%d tasks</string>
+    <string name="notesLabel">Notes:</string>
+    <string name="notesHint">Optional task notes</string>
 </resources>

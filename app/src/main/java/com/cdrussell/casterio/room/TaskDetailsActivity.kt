@@ -37,6 +37,7 @@ class TaskDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_details)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         configureAssigneeAdapter()
 
         taskDao = AppDatabase.getInstance(this).taskDao()
@@ -93,6 +94,7 @@ class TaskDetailsActivity : AppCompatActivity() {
             taskIdView.text = task.id.toString()
             taskCompletionCheckbox.isChecked = task.completed
             taskCreationDate.text = dateFormatter.format(task.creationDate)
+            notes.setText(task.notes)
         }
     }
 
@@ -178,6 +180,14 @@ class TaskDetailsActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        val task = task ?: return
+        task.notes = notes.text.toString()
+        thread { taskDao.update(task) }
     }
 
     companion object {
