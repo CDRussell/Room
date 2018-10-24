@@ -18,10 +18,10 @@ interface TaskDao {
     fun getAll(): LiveData<List<Task>>
 
     @Transaction
-    @Query("SELECT Task.id as task_id, Task.completed as task_completed, Task.title as task_title, Task.creationDate as task_creationDate, AssignedTask.user, User.* FROM Task LEFT OUTER JOIN AssignedTask on Task.id = AssignedTask.task LEFT OUTER JOIN User on AssignedTask.user = User.id")
+    @Query("SELECT Task.id as task_id, Task.completed as task_completed, Task.title as task_title, Task.creationDate as task_creationDate, Task.notes as task_notes, AssignedTask.user, User.* FROM Task LEFT OUTER JOIN AssignedTask on Task.id = AssignedTask.task LEFT OUTER JOIN User on AssignedTask.user = User.id")
     fun getAllWithAssignedUsers(): LiveData<List<TaskUserPair>>
 
-    @Query("SELECT Task.id as task_id, Task.completed as task_completed, Task.title as task_title, Task.creationDate as task_creationDate, AssignedTask.user, User.* FROM Task LEFT OUTER JOIN AssignedTask on Task.id = AssignedTask.task LEFT OUTER JOIN User on AssignedTask.user = User.id WHERE Task.id = :taskId")
+    @Query("SELECT Task.id as task_id, Task.completed as task_completed, Task.title as task_title, Task.creationDate as task_creationDate, Task.notes as task_notes, AssignedTask.user, User.* FROM Task LEFT OUTER JOIN AssignedTask on Task.id = AssignedTask.task LEFT OUTER JOIN User on AssignedTask.user = User.id WHERE Task.id = :taskId")
     fun getAssignedUsers(taskId: Int): LiveData<List<TaskUserPair>>
 
     @Query("SELECT * FROM Task WHERE id = :taskId")

@@ -9,15 +9,17 @@ data class Task(
     @PrimaryKey(autoGenerate = true) var id: Int,
     var title: String,
     var completed: Boolean,
-    var creationDate: Date
+    var creationDate: Date,
+    var notes: String
 ) {
 
     @Ignore
     constructor(
         title: String = "",
         completed: Boolean = false,
-        creationDate: Date = Date(System.currentTimeMillis())
-    ) : this(0, title, completed, creationDate)
+        creationDate: Date = Date(System.currentTimeMillis()),
+        notes: String = ""
+    ) : this(0, title, completed, creationDate, notes)
 }
 
 class DateTypeConverter {
