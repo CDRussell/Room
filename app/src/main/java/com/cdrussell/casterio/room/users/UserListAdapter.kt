@@ -27,11 +27,11 @@ class UserListAdapter(private val deleteListener: (UserAndTasks) -> Unit) :
 
         val DIFF_UTIL_CALLBACK = object : DiffUtil.ItemCallback<UserAndTasks>() {
 
-            override fun areItemsTheSame(oldItem: UserAndTasks?, newItem: UserAndTasks?): Boolean {
-                return oldItem?.user?.id == newItem?.user?.id
+            override fun areItemsTheSame(oldItem: UserAndTasks, newItem: UserAndTasks): Boolean {
+                return oldItem?.user.id == newItem.user.id
             }
 
-            override fun areContentsTheSame(oldItem: UserAndTasks?, newItem: UserAndTasks?): Boolean {
+            override fun areContentsTheSame(oldItem: UserAndTasks, newItem: UserAndTasks): Boolean {
                 return oldItem == newItem
             }
         }
