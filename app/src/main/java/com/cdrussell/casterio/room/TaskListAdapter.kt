@@ -29,11 +29,11 @@ class TaskListAdapter(private val clickListener: (TaskAndItsUsers) -> Unit) :
 
         val DIFF_UTIL_CALLBACK = object : DiffUtil.ItemCallback<TaskAndItsUsers>() {
 
-            override fun areItemsTheSame(oldItem: TaskAndItsUsers?, newItem: TaskAndItsUsers?): Boolean {
-                return oldItem?.task?.id == newItem?.task?.id
+            override fun areItemsTheSame(oldItem: TaskAndItsUsers, newItem: TaskAndItsUsers): Boolean {
+                return oldItem.task.id == newItem.task.id
             }
 
-            override fun areContentsTheSame(oldItem: TaskAndItsUsers?, newItem: TaskAndItsUsers?): Boolean {
+            override fun areContentsTheSame(oldItem: TaskAndItsUsers, newItem: TaskAndItsUsers): Boolean {
                 return oldItem == newItem
             }
         }
