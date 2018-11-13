@@ -1,5 +1,5 @@
 # Room
-This project is the sample app for the [Room course on Caster.io](https://caster.io/courses/storing-data-in-android-with-room). You will want to watch the 
+This project is the sample app for the [Room course on Caster.io](https://caster.io/courses/storing-data-in-android-with-room). You will want to watch the full course there which will explain all of the code in this project.
 
 # Project Structure
 This project is structured such that each lesson in the Caster.io course will typically add new code to the app.
