@@ -23,6 +23,6 @@ interface UserDao {
     fun update(user: User)
 
     @Transaction
-    @Query("SELECT Task.id as task_id, Task.completed as task_completed, Task.title as task_title, AssignedTask.user, User.* FROM User LEFT OUTER JOIN AssignedTask on User.id = AssignedTask.user LEFT OUTER JOIN Task on AssignedTask.task = Task.id")
+    @Query("SELECT Task.id as task_id, Task.completed as task_completed, Task.title as task_title, Task.creationDate as task_creationDate, Task.notes as task_notes, AssignedTask.user, User.* FROM User LEFT OUTER JOIN AssignedTask on User.id = AssignedTask.user LEFT OUTER JOIN Task on AssignedTask.task = Task.id")
     fun getAllWithAssignedTasks(): LiveData<List<UserTaskPair>>
 }
